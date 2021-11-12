@@ -9,7 +9,7 @@ x = 0.
 y = 0.
 
 scene = canvas(title='Random walk',
-     width=500, height=500,
+     width=600, height=600,
      center=vector(0,0,0), background=color.cyan)
 
 c = curve(vector(-1,-1,0), vector(1,-1,0))
