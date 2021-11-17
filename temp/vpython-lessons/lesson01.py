@@ -36,7 +36,8 @@ print(wallFront.pos.z)
 print(wallBack.pos.z)
 
 while t < 5:
-    rate(100)
+    # rate(100)
+    sleep(0.1)
     collision = False
     if ball.pos.x + ball_radius > wallR.pos.x - wall_thickness or \
             ball.pos.x - ball_radius < wallL.pos.x + wall_thickness:
