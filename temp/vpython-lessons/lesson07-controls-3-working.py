@@ -1,6 +1,6 @@
 from vpython import *
 
-scene.width, scene.height, scene.range, scene.title = 350, 300, 1.3, 'Widgets (buttons, etc.)\n'
+scene.width, scene.height, scene.range, scene.title = 600, 600, 1.3, 'Widgets (buttons, etc.)\n'
 running = True
 
 
@@ -36,9 +36,25 @@ col = color.cyan
 currentobject = box_object
 currentobject.color = col
 
+# curve(pos=[vector(0, 0, 0), vector(10, 10, 10)])
+
+# f1 = gcurve(color=color.cyan, fast=True)  # a graphics curve)
+# f2 = gvbars(delta=0.05, color=color.blue)
+# for x in arange(0, 8.05, 0.1):  # x goes from 0 to 8
+#     sleep(0.1)
+#     f1.plot(x, 5 * cos(2 * x) * exp(-0.2 * x))
+#     f2.plot(x, 4 * cos(0.5 * x) * exp(-0.1 * x))  # vbars
+
 dt = 0.01
+
+
 
 while True:
     rate(1 / dt)
     if running:
         currentobject.rotate(angle=sl.value * dt, axis=vector(0, 1, 0))
+
+        for x in arange(0, 8.05, 0.1):  # x goes from 0 to 8
+            # sleep(0.01)
+            f1.plot(x, sl.value * cos(2 * x) * exp(-0.2 * x))
+            f2.plot(x, sl.value * cos(0.5 * x) * exp(-0.1 * x))  # vbars

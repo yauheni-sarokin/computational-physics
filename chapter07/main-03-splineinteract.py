@@ -24,7 +24,7 @@ def update(c):
         funct1.plot(pos=(x[i] + c.value, y[i]))
         funct1.plot(pos=(1.01 * x[i], 1.01 * y[i]))
         funct1.plot(pos=(.99 * x[i], .99 * y[i]))
-        yp1 = (y[1] - y[0]) / (x[1] - x[0]) - (y[2] - y[1]) / (x[2] - x[1]) + (y[2] - y[0]) / (x[2] - x[0])
+        # yp1 = (y[1] - y[0]) / (x[1] - x[0]) - (y[2] - y[1]) / (x[2] - x[1]) + (y[2] - y[0]) / (x[2] - x[0])
 
 
 sl = slider(bind=update, min=1, max=50)
