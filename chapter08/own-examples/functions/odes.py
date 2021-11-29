@@ -1,43 +1,36 @@
-from numpy import linspace
+from numpy import linspace, arange
 
 
-def euler2(xpoints: [float], ypoints: [float], c: float, n: int):
-    h = (xpoints[0] - xpoints[-1]) / n
+def euler(xpoints: [float], ypoints: [float], c: float = 0) -> [float]:
+    '''
+    This function finds derivative of the set of x and y points
+    :param xpoints: set of x-axis datapoints
+    :param ypoints: set of y-axis datapoints
+    :param c: any constant
+    :return: only set of y points
+    '''
+    n = len(xpoints)
+    h = (xpoints[-1] - xpoints[0]) / n
     ypoints_d = []
     for y in ypoints:
         ypoints_d.append(c)
         c += y * h
 
-    return xpoints, ypoints
+    return ypoints_d
 
 
-def func_to_array(func, a, b, n):
+def func_to_array(func, a: float, b: float, n) -> tuple[[float], [float]]:
+    '''
+
+    :param func:
+    :param a: start from
+    :param b: end at
+    :param n: how precise
+    :return:
+    '''
     xpoints, ypoints = [], []
     range_ = linspace(a, b, n)
-    # print(arange(0, 10, 100))
     for x in range_:
         xpoints.append(x)
         ypoints.append(func(x))
-    return xpoints, ypoints
-
-
-def euler(c: float, a: float, b: float, n: int, function):
-    """
-    a # Start of the interval
-    b # End of the interval
-    n # Number of steps
-    h = (b - a) / N  # Size of a single step
-    c = 0.0  # Initial condition
-    """
-    h = (b - a) / n
-    xpoints = arange(a, b, h)
-    ypoints = []
-
-    for x in xpoints:
-        ypoints.append(c)
-        c += h * function(x)
-        # c += 1
-
-    # print(function(1))
-    # function('s')
     return xpoints, ypoints
