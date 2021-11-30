@@ -19,7 +19,7 @@ def euler(xpoints: [float], ypoints: [float], c: float = 0) -> [float]:
     return ypoints_d
 
 
-def func_to_array(func, a: float, b: float, n) -> tuple[[float], [float]]:
+def func_to_array(func, a: float, b: float, n) :
     '''
 
     :param func:
