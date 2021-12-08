@@ -1,7 +1,7 @@
 from numpy import arccos, sqrt, pi, sin, cos
 from vpython import *
 
-scene.width, scene.height = 900, 900
+scene.width, scene.height = 700, 700
 origin_vector = vector(0, 0, 0)
 
 l_rope = 1

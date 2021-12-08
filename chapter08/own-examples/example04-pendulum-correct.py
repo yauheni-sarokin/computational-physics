@@ -1,0 +1,81 @@
+from vpython import *
+from numpy import arccos, sqrt, pi, sin, cos, array, add
+
+scene.width, scene.height = 700, 700
+
+origin_vector = vector(0, 0, 0)
+
+# Length of rope in meters
+l_rope = 1
+# squared length of rope
+l_rope_squared = l_rope ** 2
+# angle theta
+theta = (pi / 180) * 45
+# gravitational constant m / s ** 2
+g = -9.81
+# mass of the sphere in kg
+m = 1
+
+# initial position of the sphere
+pos_x, pos_y = l_rope * sin(theta), - l_rope * cos(theta)
+x_force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(0, 0, 0), shaftwidth=0.02)
+y_force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(0, 0, 0), shaftwidth=0.02)
+
+# axis of plane
+curve(pos=[vector(-1, 0, 0), vector(1, 0, 0)], color=color.blue)  # x
+curve(pos=[vector(0, 1, 0), vector(0, -1, 0)], color=color.red)  # y
+
+ball_position_vector = vector(pos_x, pos_y, 0)
+ball_radius = 0.1
+# ball without trail
+ball = sphere(pos=ball_position_vector, radius=ball_radius, color=color.cyan, make_trail=False)
+# rope
+rope = curve(origin_vector, ball_position_vector)
+
+# force due to sphere mass {x, y}
+sphere_mass_vector = array([0, m * g])
+# rope reaction force
+# rope_reaction_force = cos(theta) * m * g
+# rope reaction force vector {x, y}
+# rope_force_vector = array([rope_reaction_force * sin(theta), - rope_reaction_force * cos(theta)])
+# print(rope_force_vector)
+# total_force_vector = add(sphere_mass_vector, rope_force_vector)
+# print(total_force_vector)
+
+# force_vector = array([0, 0])
+
+time = 0
+delta_time = 0.02
+counter = 0
+while True:
+    # print('cycle')
+    rope.clear()
+    # all the additionally forces acting on the ball at this moment
+    # start from calculation iof the forces acting on the rope
+    rope_reaction_force = cos(theta) * m * g
+    # rope reaction force vector {x, y}
+    rope_force_vector = array([rope_reaction_force * sin(theta), - rope_reaction_force * cos(theta)])
+    # update it considering previous forces
+    force_vector = add(rope_force_vector, sphere_mass_vector)
+    # calculate distance traveled, newtons law F = ma, a = F/m, l = F/m * dt**2
+    vector_distance = (force_vector / m) * (delta_time ** 2)
+    distance_traveled = sqrt(vector_distance[0] ** 2 + vector_distance[1] ** 2)
+    # cos of delta theta
+    cos_delta_theta = 1 - (1 / 2) * ((distance_traveled ** 2) / l_rope_squared)
+    # delta theta
+    delta_theta = arccos(cos_delta_theta)
+    theta -= delta_theta
+    # new position of the sphere
+    pos_x, pos_y = l_rope * sin(theta), - l_rope * cos(theta)
+
+    # update ball posiiton
+    ball.pos.x = pos_x
+    ball.pos.y = pos_y
+    # update rope
+    rope.append(origin_vector)
+    rope.append(vector(pos_x, pos_y, 0))
+
+
+    counter += 1
+    time += delta_time
+    sleep(0.01)
