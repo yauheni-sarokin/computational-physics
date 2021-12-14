@@ -17,7 +17,7 @@ m = 1
 sphere_mass_vector = array([0, m * g])
 
 time = 0
-delta_time = 0.01
+delta_time = 0.001
 speed_vector = array([0, 0])
 
 sphere_position = array([l_rope * sin(theta), - l_rope * cos(theta)])
@@ -90,4 +90,4 @@ while True:
     canvas.set_rope_position(sphere_position[0], sphere_position[1])
     canvas.set_force_arrow_position_and_axis(sphere_position[0], sphere_position[1], force_vector[0] / 10,
                                              force_vector[1] / 10)
-    sleep(0.1)
+    sleep(0.01)
