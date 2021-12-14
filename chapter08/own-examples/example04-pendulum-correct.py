@@ -1,5 +1,5 @@
 from vpython import *
-from numpy import arccos, sqrt, pi, sin, cos, array, add
+from numpy import arccos, sqrt, pi, sin, cos, array, add, arctan
 
 scene.width, scene.height = 700, 700
 
@@ -10,7 +10,7 @@ l_rope = 1
 # squared length of rope
 l_rope_squared = l_rope ** 2
 # angle theta
-theta = (pi / 180) * 10
+theta = (pi / 180) * 40
 # gravitational constant m / s ** 2
 g = -9.81
 # mass of the sphere in kg
@@ -45,14 +45,18 @@ sphere_mass_vector = array([0, m * g])
 # force_vector = array([0, 0])
 
 time = 0
-delta_time = 0.02
+delta_time = 0.01
 counter = 0
 
 # vector incuding previous forces
-force_vector = array([0, 0])
-force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(force_vector[0] / 10, force_vector[1] / 10,
+# force_vector = array([0, 0])
+# force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(force_vector[0] / 10, force_vector[1] / 10,
+#                                                              0), shaftwidth=0.1)
+force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(0 / 10, 0 / 10,
                                                              0), shaftwidth=0.1)
 # force_arrow = arrow(pos=vector(pos_x, pos_y, 0), axis=vector(force_vector[0], force_vector[1], 0))
+
+speed_vector = array([0, 0])
 
 while True:
     # print('cycle')
@@ -65,24 +69,46 @@ while True:
     # total force vector acting on the ball
     total_force_vector = add(rope_force_vector, sphere_mass_vector)
 
-    force_vector = add(force_vector, total_force_vector)
-    print(f'force vector {force_vector} theta {theta * 180 / pi}')
+    # force_vector = add(force_vector, total_force_vector)
+    # print(f'force vector {force_vector} theta {theta * 180 / pi}')
+
     # calculate distance traveled, newtons law F = ma, a = F/m, l = F/m * dt**2
-    vector_distance = (force_vector / m) * (delta_time ** 2)
-    distance_traveled = sqrt(vector_distance[0] ** 2 + vector_distance[1] ** 2)
+    vector_distance_increment = (total_force_vector / m) * (delta_time ** 2)
+    vector_speed_increment = (total_force_vector / m) * delta_time
+    # теперь либо увеличить скорость после сдвига либо до
+    speed_vector = add(speed_vector, vector_speed_increment)
+
+    distance_vector = add(vector_distance_increment, speed_vector * delta_time)
+
+    # vector_distance = add(vector_distance, speed_vector * delta_time)
+
+    # speed_vector_increment = vector_distance_increment / delta_time
+    # speed_vector = add(speed_vector, speed_vector_increment)
+    # print(f'speed increment {speed_vector}')
+
+    # distance_traveled = sqrt(vector_distance_increment[0] ** 2 + vector_distance_increment[1] ** 2)
+    distance_traveled = sqrt(distance_vector[0] ** 2 + distance_vector[1] ** 2)
     # cos of delta theta
     cos_delta_theta = 1 - (1 / 2) * ((distance_traveled ** 2) / l_rope_squared)
     # delta theta
     # todo: Error is here, the delta force continue adding, calculate it some how from the vectors
-    delta_theta = arccos(cos_delta_theta)
+
+    # strange weird construction becouse I dont know triginometry
+    multiplier = 1
+    if speed_vector[0] < 0:
+        multiplier = 1
+    elif speed_vector[0] > 0:
+        multiplier = -1
+
+    delta_theta = arccos(cos_delta_theta) * multiplier
     theta -= delta_theta
     # new position of the sphere
     pos_x, pos_y = l_rope * sin(theta), - l_rope * cos(theta)
 
     force_arrow.pos.x = pos_x
     force_arrow.pos.y = pos_y
-    force_arrow.axis.x = force_vector[0] / 10
-    force_arrow.axis.y = force_vector[1] / 10
+    force_arrow.axis.x = total_force_vector[0] / 10
+    force_arrow.axis.y = total_force_vector[1] / 10
     # update ball posiiton
     ball.pos.x = pos_x
     ball.pos.y = pos_y
